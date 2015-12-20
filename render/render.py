@@ -325,6 +325,7 @@ class Animate(Render):
     Render.__init__(self, n, front, back)
 
     window = gtk.Window()
+    self.window = window
     window.resize(self.n, self.n)
 
     self.step = step
