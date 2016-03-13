@@ -263,6 +263,29 @@ class Render(object):
           rectangle(x,y,pix,pix)
           fill()
 
+  def sandstroke_non_linear(self,xys,grains=10,left=True):
+
+    pix = self.pix
+    rectangle = self.ctx.rectangle
+    fill = self.ctx.fill
+
+    dx = xys[:,2] - xys[:,0]
+    dy = xys[:,3] - xys[:,1]
+
+    aa = arctan2(dy,dx)
+    directions = column_stack([cos(aa),sin(aa)])
+
+    dd = sqrt(square(dx)+square(dy))
+
+    for i,d in enumerate(dd):
+      rnd = sqrt(random((grains,1)))
+      if left:
+        rnd = 1.0-rnd
+
+      for x,y in xys[i,:2] + directions[i,:]*rnd*d:
+        rectangle(x,y,pix,pix)
+        fill()
+
   def sandstroke(self,xys,grains=10):
 
     pix = self.pix
