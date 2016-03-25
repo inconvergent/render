@@ -371,6 +371,12 @@ class Animate(Render):
 
     gtk.main_quit(*args)
 
+  def start(self):
+
+    import gtk
+
+    gtk.main()
+
   def expose(self,*args):
 
     #cr = self.cr
