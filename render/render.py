@@ -5,6 +5,8 @@ from __future__ import division
 from __future__ import print_function
 
 import cairo
+from cairo import OPERATOR_SOURCE
+
 from numpy.random import random
 from numpy import pi, sqrt, linspace, arctan2, cos, sin, \
   column_stack, square, array, reshape, floor
@@ -180,6 +182,23 @@ class Render(object):
       ctx.fill()
     else:
       ctx.stroke()
+
+  def transparent_pix(self):
+
+    op = self.ctx.get_operator()
+    self.ctx.set_operator(OPERATOR_SOURCE)
+    self.ctx.set_source_rgba(*[1,1,1,0.95])
+    self.dot(1-self.pix,1.0-self.pix)
+    self.ctx.set_operator(op)
+
+  def path(self, xy):
+
+    ctx = self.ctx
+    ctx.move_to(*xy[0,:])
+    for x in xy:
+      ctx.line_to(*x)
+
+    ctx.stroke()
 
   def closed_path(self, coords, fill=True):
 
