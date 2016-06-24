@@ -9,7 +9,6 @@ def random_points_in_circle(n,xx,yy,rr):
   """
   get n random points in a circle.
   """
-
   from numpy import zeros, logical_not
   from numpy import column_stack
   from numpy import cos
@@ -36,7 +35,6 @@ def darts(n, xx, yy, rr, dst):
   centered at (xx,yy), with radius rr. points are no closer to each other
   than dst.
   """
-
   from scipy.spatial import distance
   from numpy import array
   cdist = distance.cdist

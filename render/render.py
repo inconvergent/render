@@ -7,9 +7,16 @@ from __future__ import print_function
 import cairo
 from cairo import OPERATOR_SOURCE
 
+from numpy import arctan2
+from numpy import array
+from numpy import column_stack
+from numpy import cos
+from numpy import linspace
+from numpy import pi
+from numpy import sin
+from numpy import sqrt
+from numpy import square
 from numpy.random import random
-from numpy import pi, sqrt, linspace, arctan2, cos, sin, \
-  column_stack, square, array, reshape, floor
 
 
 TWOPI = pi*2
@@ -18,7 +25,6 @@ TWOPI = pi*2
 class Render(object):
 
   def __init__(self,n, back, front):
-
     self.n = n
     self.front = front
     self.back = back
@@ -29,7 +35,6 @@ class Render(object):
     self.__init_cairo()
 
   def __init_cairo(self):
-
     sur = cairo.ImageSurface(cairo.FORMAT_ARGB32,self.n,self.n)
     ctx = cairo.Context(sur)
     ctx.scale(self.n,self.n)
@@ -40,7 +45,6 @@ class Render(object):
     self.clear_canvas()
 
   def clear_canvas(self):
-
     ctx = self.ctx
 
     ctx.set_source_rgba(*self.back)
@@ -49,34 +53,27 @@ class Render(object):
     ctx.set_source_rgba(*self.front)
 
   def write_to_png(self,fn):
-
     self.sur.write_to_png(fn)
     self.num_img += 1
 
   def set_front(self, c):
-
     self.front = c
     self.ctx.set_source_rgba(*c)
 
   def set_back(self, c):
-
     self.back = c
 
   def set_line_width(self, w):
-
     self.line_width = w
     self.ctx.set_line_width(w)
 
   def line(self,x1,y1,x2,y2):
-
     ctx = self.ctx
-
     ctx.move_to(x1,y1)
     ctx.line_to(x2,y2)
     ctx.stroke()
 
   def triangle(self,x1,y1,x2,y2,x3,y3,fill=False):
-
     ctx = self.ctx
     ctx.move_to(x1,y1)
     ctx.line_to(x2,y2)
@@ -89,7 +86,6 @@ class Render(object):
       ctx.stroke()
 
   def random_parallelogram(self,x1,y1,x2,y2,x3,y3,grains):
-
     pix = self.pix
     rectangle = self.ctx.rectangle
     fill = self.ctx.fill
@@ -110,7 +106,6 @@ class Render(object):
       fill()
 
   def random_triangle(self,x1,y1,x2,y2,x3,y3,grains):
-
     pix = self.pix
     rectangle = self.ctx.rectangle
     fill = self.ctx.fill
@@ -139,7 +134,6 @@ class Render(object):
     """
     random points in circle. nonuniform distribution.
     """
-
     pix = self.pix
     rectangle = self.ctx.rectangle
     fill = self.ctx.fill
@@ -155,7 +149,6 @@ class Render(object):
       fill()
 
   def random_uniform_circle(self,x1,y1,r,grains,dst=0):
-
     from helpers import darts
 
     pix = self.pix
@@ -167,14 +160,12 @@ class Render(object):
       fill()
 
   def dot(self,x,y):
-
     ctx = self.ctx
     pix = self.pix
     ctx.rectangle(x,y,pix,pix)
     ctx.fill()
 
   def circle(self,x,y,r,fill=False):
-
     ctx = self.ctx
 
     ctx.arc(x,y,r,0,TWOPI)
@@ -184,7 +175,6 @@ class Render(object):
       ctx.stroke()
 
   def transparent_pix(self):
-
     op = self.ctx.get_operator()
     self.ctx.set_operator(OPERATOR_SOURCE)
     self.ctx.set_source_rgba(*[1,1,1,0.95])
@@ -192,16 +182,13 @@ class Render(object):
     self.ctx.set_operator(op)
 
   def path(self, xy):
-
     ctx = self.ctx
     ctx.move_to(*xy[0,:])
     for x in xy:
       ctx.line_to(*x)
-
     ctx.stroke()
 
   def closed_path(self, coords, fill=True):
-
     ctx = self.ctx
     line_to = ctx.line_to
 
@@ -219,7 +206,6 @@ class Render(object):
       ctx.stroke()
 
   def circle_path(self, coords, r, fill=False):
-
     ctx = self.ctx
     for x,y in coords:
       ctx.arc(x,y,r,0,TWOPI)
@@ -229,7 +215,6 @@ class Render(object):
         ctx.stroke()
 
   def circles(self,x1,y1,x2,y2,r,nmin=2):
-
     arc = self.ctx.arc
     fill = self.ctx.fill
 
@@ -252,7 +237,6 @@ class Render(object):
       fill()
 
   def sandstroke_orthogonal(self,xys,height=None,steps=10,grains=10):
-
     pix = self.pix
     rectangle = self.ctx.rectangle
     fill = self.ctx.fill
@@ -273,17 +257,16 @@ class Render(object):
     for i,d in enumerate(dd):
 
       xy_start = xys[i,:2] + \
-        directions[i,:]*random((steps,1))*d
+          directions[i,:]*random((steps,1))*d
 
       for xy in xy_start:
         points = xy + \
-          directions_orth[i,:]*random((grains,1))*height
+            directions_orth[i,:]*random((grains,1))*height
         for x,y in points:
           rectangle(x,y,pix,pix)
           fill()
 
   def sandstroke_non_linear(self,xys,grains=10,left=True):
-
     pix = self.pix
     rectangle = self.ctx.rectangle
     fill = self.ctx.fill
@@ -306,7 +289,6 @@ class Render(object):
         fill()
 
   def sandstroke(self,xys,grains=10):
-
     pix = self.pix
     rectangle = self.ctx.rectangle
     fill = self.ctx.fill
@@ -325,7 +307,6 @@ class Render(object):
         fill()
 
   def set_front_from_colors(self, i, a=1):
-
     ii = i%self.ncolors
 
     r,g,b = self.colors[ii]
@@ -335,7 +316,6 @@ class Render(object):
     self.ctx.set_source_rgba(*c)
 
   def get_colors_from_file(self, fn):
-
     import Image
     from numpy.random import shuffle
 
@@ -361,7 +341,6 @@ class Render(object):
 class Animate(Render):
 
   def __init__(self, n, front ,back, step):
-
     import gtk, gobject
 
     Render.__init__(self, n, front, back)
@@ -385,26 +364,19 @@ class Animate(Render):
     gobject.idle_add(self.step_wrap)
 
   def __destroy(self,*args):
-
     import gtk
-
     gtk.main_quit(*args)
 
   def start(self):
-
     import gtk
-
     gtk.main()
 
   def expose(self,*args):
-
-    #cr = self.cr
     cr = self.darea.window.cairo_create()
     cr.set_source_surface(self.sur,0,0)
     cr.paint()
 
   def step_wrap(self):
-
     res = self.step(self)
     self.steps += 1
     self.expose()
